@@ -28,15 +28,15 @@ public class Car {
     public void move(){
         if (right) {
             xpos = xpos + dx;
-            if (xpos > 525 - width) {
-                xpos = 525 - width;
+            if (xpos > 560 - width) {
+                xpos = 560 - width;
             }
         }
 
         if (left) {
             xpos = xpos - dx;
-            if (xpos < 140) {
-                xpos = 140;
+            if (xpos < 110) {
+                xpos = 110;
             }
         }
 

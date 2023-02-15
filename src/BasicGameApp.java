@@ -24,11 +24,14 @@ public class BasicGameApp implements MouseListener, MouseMotionListener, KeyList
     public long startTime;
     public long currentTime;
     public long elapsedTime;
+    public int highScore = 3012;
 
-    public boolean startTimer;
+    public boolean gameOver;
 
     public Car car;
     public Obstacle moose;
+    public Obstacle moose2;
+    public Obstacle[] herd;
 
     public Image carPic;
     public Image moosePic;
@@ -49,11 +52,17 @@ public class BasicGameApp implements MouseListener, MouseMotionListener, KeyList
         canvas.addKeyListener(this);
 
         carPic = Toolkit.getDefaultToolkit().getImage("Back of Ferrari.png"); //load the picture
-        car = new Car("car",(int)((Math.random()*100)+140), 3, 70, 45);
+        car = new Car("car",(int)((Math.random()*100)+140), 4, 55, 35);
 
         moosePic = Toolkit.getDefaultToolkit().getImage("Moose-PNG-Image-File.png"); //load the picture
-        moose = new Obstacle("moose", (int)((Math.random()*10)+300), 200, 1, 1, 70,50);
+        //moose = new Obstacle("moose", (int)((Math.random()*50)+300), 200, 1, 1, 60,40);
 
+        //moose2 = new Obstacle("moose2", (int)((Math.random()*50)+300), 300, 2, 1, 60,40);
+
+        herd = new Obstacle[4];
+        for(int x=0;x<herd.length;x=x+1){
+            herd[x] = new Obstacle("herd "+x, (int)((Math.random()*150)+200), (int)((Math.random()*150)+100), (int)((Math.random()*2)+1), (int)((Math.random()*2)+1), 60,40);
+        }
         backgroundPic = Toolkit.getDefaultToolkit().getImage("Road Background.gif");
 
     }
@@ -153,13 +162,21 @@ public class BasicGameApp implements MouseListener, MouseMotionListener, KeyList
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
-        //g.drawString(elapsedTime+"",70,340);
-
         g.drawImage(backgroundPic, 0, 0, WIDTH, HEIGHT, null);
+
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("TimesRoman", Font.BOLD, 25));
+        g.drawString(elapsedTime+"",300,100);
 
         g.drawImage(carPic, car.xpos, car.ypos, car.width, car.height, null);
 
-        g.drawImage(moosePic, moose.xpos, moose.ypos, moose.width, moose.height, null);
+        //g.drawImage(moosePic, moose.xpos, moose.ypos, moose.width, moose.height, null);
+
+        //g.drawImage(moosePic, moose2.xpos, moose2.ypos, moose2.width, moose2.height, null);
+
+        for(int x=0;x<herd.length;x=x+1){
+            g.drawImage(moosePic, herd[x].xpos, herd[x].ypos, herd[x].width, herd[x].height, null);
+        }
 
         g.dispose();
         bufferStrategy.show();
@@ -171,25 +188,46 @@ public class BasicGameApp implements MouseListener, MouseMotionListener, KeyList
             currentTime = System.currentTimeMillis();
 
             //calculate the elapsed time
-            elapsedTime = currentTime-startTime;
+            //elapsedTime = currentTime-startTime;
+            if(gameOver==false) {
+                elapsedTime = elapsedTime+1;
+            }
 
             crash();
             moveThings();
             render();
-            //System.out.println(car.xpos);
-            pause(10); // sleep for 10 ms
+            pause(10);
         }
     }
 
     public void moveThings() {
         car.move();
-        moose.move();
+        if(gameOver == true) {
+            for (int x = 0; x < herd.length; x = x + 1) {
+                herd[x].moveOver();
+            }
+        }
+        else {
+            for (int x = 0; x < herd.length; x = x + 1) {
+                herd[x].move();
+            }
+        }
     }
 
     public void crash(){
-        if(car.rec.intersects(moose.rec)){
-            car.dx = 0;
-            System.out.println("CRASH!!");
+        for(int i=0;i<herd.length;i++){
+            if(herd[i].rec.intersects(car.rec)){
+                herd[i].xpos = (i+1)*125;
+                herd[i].ypos = 200;
+                herd[i].dx = 0;
+                herd[i].dy = 0;
+                System.out.println("CRASH!!");
+                System.out.println("Score: " + elapsedTime);
+                if(elapsedTime > highScore){
+                    System.out.println("New High Score!");
+                }
+                gameOver = true;
+            }
         }
     }
 

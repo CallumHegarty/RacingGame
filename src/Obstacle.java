@@ -31,9 +31,16 @@ public class Obstacle {
         if (xpos <= 120) {
             dx = -dx;
         }
-        if(ypos > 400-(height*3/2) && dy > 0) {
-            ypos = 180;
+        if(ypos > 400 && dy > 0) {
+            ypos = 160;
         }
+
+        rec = new Rectangle(xpos,ypos,width,height);
+    }
+
+    public void moveOver(){
+        xpos = xpos + dx;
+        ypos = ypos + dy;
 
         rec = new Rectangle(xpos,ypos,width,height);
     }
