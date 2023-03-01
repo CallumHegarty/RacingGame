@@ -2,15 +2,15 @@ import java.awt.*;
 public class Obstacle {
 
     public String name;
-    public int xpos;
-    public int ypos;
-    public int dx;
-    public int dy;
+    public double xpos;
+    public double ypos;
+    public double dx;
+    public double dy;
     public int width;
     public int height;
     public Rectangle rec;
 
-    public Obstacle(String pName, int pXpos, int pYpos, int pDx, int pDy, int pWidth, int pHeight) {
+    public Obstacle(String pName, double pXpos, double pYpos, double pDx, double pDy, int pWidth, int pHeight) {
         name = pName;
         xpos = pXpos;
         ypos = pYpos;
@@ -18,7 +18,7 @@ public class Obstacle {
         dy = pDy;
         width = pWidth;
         height = pHeight;
-        rec = new Rectangle(xpos,ypos,width,height);
+        rec = new Rectangle((int) xpos,(int) ypos,width,height);
     }
 
     public void move(){
@@ -35,14 +35,14 @@ public class Obstacle {
             ypos = 160;
         }
 
-        rec = new Rectangle(xpos,ypos,width,height);
+        rec = new Rectangle((int) xpos,(int) ypos,width,height);
     }
 
     public void moveOver(){
         xpos = xpos + dx;
         ypos = ypos + dy;
 
-        rec = new Rectangle(xpos,ypos,width,height);
+        rec = new Rectangle((int) xpos,(int) ypos,width,height);
     }
 
 }

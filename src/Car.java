@@ -5,6 +5,7 @@ public class Car {
     public int xpos;
     public int ypos;
     public int dx;
+    public int dy = 2;
     public int width;
     public int height;
     public Rectangle rec;
@@ -37,6 +38,20 @@ public class Car {
             xpos = xpos - dx;
             if (xpos < 110) {
                 xpos = 110;
+            }
+        }
+
+        if (up) {
+            ypos = ypos - dy;
+            if (ypos < 300) {
+                ypos = 300;
+            }
+        }
+
+        if (down) {
+            ypos = ypos + dy;
+            if (ypos > 380 - height) {
+                ypos = 380 - height;
             }
         }
 

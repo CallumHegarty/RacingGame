@@ -17,14 +17,12 @@ public class BasicGameApp implements MouseListener, MouseMotionListener, KeyList
     public Canvas canvas;
     public BufferStrategy bufferStrategy;
 
-    //Mouse position variables
-    public int mouseX, mouseY;
-
     //timer variables
     public long startTime;
     public long currentTime;
     public long elapsedTime;
     public int highScore = 3012;
+    public boolean gameStart = false;
 
     public boolean gameOver;
 
@@ -55,13 +53,13 @@ public class BasicGameApp implements MouseListener, MouseMotionListener, KeyList
         car = new Car("car",(int)((Math.random()*100)+140), 4, 55, 35);
 
         moosePic = Toolkit.getDefaultToolkit().getImage("Moose-PNG-Image-File.png"); //load the picture
-        //moose = new Obstacle("moose", (int)((Math.random()*50)+300), 200, 1, 1, 60,40);
+        moose = new Obstacle("moose", 90, 200, 1, 1, 9,6);
 
         //moose2 = new Obstacle("moose2", (int)((Math.random()*50)+300), 300, 2, 1, 60,40);
 
         herd = new Obstacle[4];
         for(int x=0;x<herd.length;x=x+1){
-            herd[x] = new Obstacle("herd "+x, (int)((Math.random()*150)+200), (int)((Math.random()*150)+100), (int)((Math.random()*2)+1), (int)((Math.random()*2)+1), 60,40);
+            herd[x] = new Obstacle("herd "+x, (int)((Math.random()*150)+200), (int)((Math.random()*150)+100), (double)((Math.random()*2)), (double)((Math.random()*2)), 60,40);
         }
         backgroundPic = Toolkit.getDefaultToolkit().getImage("Road Background.gif");
 
@@ -110,7 +108,16 @@ public class BasicGameApp implements MouseListener, MouseMotionListener, KeyList
         if (keyCode == 37) {
             car.left = true;
         }
+        if (keyCode == 32) {
+            car.up = true;
+            car.down = false;
+        }
+
+        if (keyCode == 10) {
+            gameStart = true;
+        }
     }
+
 
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
@@ -121,39 +128,35 @@ public class BasicGameApp implements MouseListener, MouseMotionListener, KeyList
         if (keyCode == 37) {
             car.left = false;
         }
+        if (keyCode == 32) {
+            car.up = false;
+            car.down = true;
+        }
     }
 
 
     public void mouseClicked(MouseEvent e) {
-
+        int x, y;
+        x = e.getX();
+        y = e.getY();
+        System.out.println(x+", "+y);
     }
-
 
     public void mousePressed(MouseEvent e) {
 
     }
-
-
     public void mouseReleased(MouseEvent e) {
 
     }
-
-
     public void mouseEntered(MouseEvent e) {
 
     }
-
-
     public void mouseExited(MouseEvent e) {
 
     }
-
-
     public void mouseDragged(MouseEvent e) {
 
     }
-
-
     public void mouseMoved(MouseEvent e) {
 
     }
@@ -162,20 +165,30 @@ public class BasicGameApp implements MouseListener, MouseMotionListener, KeyList
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
-        g.drawImage(backgroundPic, 0, 0, WIDTH, HEIGHT, null);
+        if((gameStart == false)||(gameOver == true)){
+            g.setColor(Color.CYAN);
+            g.fillRect(0,0,WIDTH,HEIGHT);
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("Comic Sans", Font.BOLD, 25));
+            g.drawString("Press Enter",300,200);
+            //g.drawImage(startScreenPic, 0,0, WIDTH, HEIGHT, null);
+        }
+        else {
+            g.drawImage(backgroundPic, 0, 0, WIDTH, HEIGHT, null);
 
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("TimesRoman", Font.BOLD, 25));
-        g.drawString(elapsedTime+"",300,100);
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("TimesRoman", Font.BOLD, 25));
+            g.drawString(elapsedTime + "", 300, 100);
 
-        g.drawImage(carPic, car.xpos, car.ypos, car.width, car.height, null);
+            g.drawImage(carPic, car.xpos, car.ypos, car.width, car.height, null);
 
-        //g.drawImage(moosePic, moose.xpos, moose.ypos, moose.width, moose.height, null);
+            //g.drawImage(moosePic, (int) moose.xpos, (int) moose.ypos, moose.width, moose.height, null);
 
-        //g.drawImage(moosePic, moose2.xpos, moose2.ypos, moose2.width, moose2.height, null);
+            //g.drawImage(moosePic, moose2.xpos, moose2.ypos, moose2.width, moose2.height, null);
 
-        for(int x=0;x<herd.length;x=x+1){
-            g.drawImage(moosePic, herd[x].xpos, herd[x].ypos, herd[x].width, herd[x].height, null);
+            for (int x = 0; x < herd.length; x = x + 1) {
+                g.drawImage(moosePic, (int) herd[x].xpos, (int) herd[x].ypos, herd[x].width, herd[x].height, null);
+            }
         }
 
         g.dispose();
@@ -189,29 +202,31 @@ public class BasicGameApp implements MouseListener, MouseMotionListener, KeyList
 
             //calculate the elapsed time
             //elapsedTime = currentTime-startTime;
-            if(gameOver==false) {
-                elapsedTime = elapsedTime+1;
-            }
+            if(gameStart == true) {
+                if (gameOver == false) {
+                    elapsedTime = elapsedTime + 1;
+                }
 
-            crash();
-            moveThings();
+                crash();
+                moveThings();
+            }
             render();
             pause(10);
         }
     }
 
     public void moveThings() {
-        car.move();
-        if(gameOver == true) {
-            for (int x = 0; x < herd.length; x = x + 1) {
-                herd[x].moveOver();
+            car.move();
+            if (gameOver == true) {
+                for (int x = 0; x < herd.length; x = x + 1) {
+                    herd[x].moveOver();
+                }
+            } else {
+                for (int x = 0; x < herd.length; x = x + 1) {
+                    herd[x].move();
+                }
             }
-        }
-        else {
-            for (int x = 0; x < herd.length; x = x + 1) {
-                herd[x].move();
-            }
-        }
+
     }
 
     public void crash(){
