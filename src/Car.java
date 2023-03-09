@@ -1,6 +1,8 @@
 import java.awt.*;
+
 public class Car {
 
+    //variable declarations
     public String name;
     public int xpos;
     public int ypos;
@@ -10,11 +12,13 @@ public class Car {
     public int height;
     public Rectangle rec;
 
+    //variables for keyboard control
     public boolean right;
     public boolean left;
     public boolean down;
     public boolean up;
 
+    //assigns parameters to variables
     public Car(String pName, int pXpos, int pDx, int pWidth, int pHeight) {
         name = pName;
         xpos = pXpos;
@@ -23,9 +27,9 @@ public class Car {
         width = pWidth;
         height = pHeight;
         rec = new Rectangle(xpos,ypos,width,height);
-
     }
 
+    //lets car move according to keyboard inputs
     public void move(){
         if (right) {
             xpos = xpos + dx;
@@ -57,5 +61,4 @@ public class Car {
 
         rec = new Rectangle(xpos,ypos,width,height);
     }
-
 }

@@ -1,6 +1,8 @@
 import java.awt.*;
+
 public class Obstacle {
 
+    //variable declarations
     public String name;
     public double xpos;
     public double ypos;
@@ -10,6 +12,7 @@ public class Obstacle {
     public int height;
     public Rectangle rec;
 
+    //assigns parameters to variables
     public Obstacle(String pName, double pXpos, double pYpos, double pDx, double pDy, int pWidth, int pHeight) {
         name = pName;
         xpos = pXpos;
@@ -21,6 +24,7 @@ public class Obstacle {
         rec = new Rectangle((int) xpos,(int) ypos,width,height);
     }
 
+    //lets the obstacles move around
     public void move(){
         xpos = xpos + dx;
         ypos = ypos + dy;
@@ -37,12 +41,4 @@ public class Obstacle {
 
         rec = new Rectangle((int) xpos,(int) ypos,width,height);
     }
-
-    public void moveOver(){
-        xpos = xpos + dx;
-        ypos = ypos + dy;
-
-        rec = new Rectangle((int) xpos,(int) ypos,width,height);
-    }
-
 }
