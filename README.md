@@ -24,5 +24,5 @@ Welcome to Callum's ultimate in-depth racing simulator! Use the right and left a
 "We will pass a law saying this is the best game ever"
 - the United States Congress
 
-Enjoy this amazing racing game! To get a better grip on the features, refer to teh following video:
+Enjoy this amazing racing game! To get a better grip on the functions and features, refer to the following video:
 https://drive.google.com/file/d/14b6m-q1ngjicoRAUQj_QBv18soiJAdph/view?usp=sharing
